@@ -6,11 +6,7 @@ import com.ubitricity.challenge.carparkubi.model.CarParkUbi;
 import com.ubitricity.challenge.carparkubi.model.CarPlugInRequestModel;
 import com.ubitricity.challenge.carparkubi.model.ChargingMode;
 import com.ubitricity.challenge.carparkubi.model.ChargingPoint;
-import com.ubitricity.challenge.carparkubi.model.ChargingPointStatus;
 import com.ubitricity.challenge.carparkubi.service.ChargingService;
-import java.sql.Ref;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,10 +92,5 @@ public class ChargingServiceTest {
     public void testGetCarParkUbiChargingPointsThrowsCarParkNotExistException() {
         when(carParkUbiMap.get(anyLong())).thenReturn(null);
         assertThrows(CarParkNotExistException.class, () -> chargingService.getCarParkUbiChargingPoints(1l));
-    }
-
-    public CarParkUbi createCarparkUbi() {
-        CarParkUbi carparkUbi = new CarParkUbi(1);
-        return carparkUbi;
     }
 }
