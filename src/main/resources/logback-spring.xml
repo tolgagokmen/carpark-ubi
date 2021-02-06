@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <springProperty scope="context" name="LOG_LEVEL_ROOT" source="logging.level.root" />
+    <springProperty scope="context" name="LOG_PATTERN" source="logging.pattern" />
+    <springProperty scope="context" name="LOG_APPENDER" source="logging.appender" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <springProfile name="dev,prod,test">
+        <root level="${LOG_LEVEL_ROOT}">
+            <appender-ref ref="${LOG_APPENDER}"/>
+        </root>
+    </springProfile>
+</configuration>
