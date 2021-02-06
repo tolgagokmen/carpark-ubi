@@ -1,9 +1,11 @@
 package com.ubitricity.challenge.carparkubi.exception;
 
-public class ChargingPointAlreadyOccupiedException extends IllegalStateException {
+public class ChargingPointAlreadyOccupiedException extends Exception {
 
-    public ChargingPointAlreadyOccupiedException(String exception) {
-        super(exception);
+    public ChargingPointAlreadyOccupiedException() {
     }
 
+    public ChargingPointAlreadyOccupiedException(String message) {
+        super(message);
+    }
 }

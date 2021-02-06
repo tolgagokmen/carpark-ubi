@@ -16,12 +16,9 @@ public class ChargingPoint {
     private ChargingPointStatus chargingPointStatus;
     private LocalDateTime plugInTime;
 
-    public void plugged(ChargingMode chargingMode) {
+    public void plugged(ChargingMode chargingMode) throws ChargingPointAlreadyOccupiedException {
         if (ChargingPointStatus.OCCUPIED.equals(this.chargingPointStatus)) {
-            String errorMessage = "Charging point is already occupied: " + this.toString();
-
-            log.error(errorMessage);
-            throw new ChargingPointAlreadyOccupiedException(errorMessage);
+            throw new ChargingPointAlreadyOccupiedException();
         }
 
         this.chargingMode = chargingMode;

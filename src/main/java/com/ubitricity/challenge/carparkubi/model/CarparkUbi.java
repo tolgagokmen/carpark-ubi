@@ -1,5 +1,6 @@
 package com.ubitricity.challenge.carparkubi.model;
 
+import com.ubitricity.challenge.carparkubi.exception.ChargingPointAlreadyOccupiedException;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +28,7 @@ public class CarparkUbi {
         });
     }
 
-    public void carPlugged(Long chargingPointId, ChargingMode chargingMode) {
+    public void carPlugged(Long chargingPointId, ChargingMode chargingMode) throws ChargingPointAlreadyOccupiedException {
         this.chargingPoints.get(chargingPointId).plugged(chargingMode);
         final long totalCurrent = this.chargingPoints.values()
                                                      .stream()

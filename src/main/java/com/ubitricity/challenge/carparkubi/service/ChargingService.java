@@ -1,5 +1,6 @@
 package com.ubitricity.challenge.carparkubi.service;
 
+import com.ubitricity.challenge.carparkubi.exception.ChargingPointAlreadyOccupiedException;
 import com.ubitricity.challenge.carparkubi.model.CarparkUbi;
 import com.ubitricity.challenge.carparkubi.model.ChargingMode;
 import com.ubitricity.challenge.carparkubi.model.ChargingPoint;
@@ -32,7 +33,7 @@ public class ChargingService {
                   });
     }
 
-    public void carPluggedIn(Long carparkUbiId, Long chargingPointId, ChargingMode chargingMode) {
+    public void carPluggedIn(Long carparkUbiId, Long chargingPointId, ChargingMode chargingMode) throws ChargingPointAlreadyOccupiedException {
         log.debug("Plugging car to charging point {} on carparkUbi {} with charging mode {} attempted");
         this.carParkUbiMap.get(carparkUbiId).carPlugged(chargingPointId, chargingMode);
     }
