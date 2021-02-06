@@ -1,52 +1,28 @@
-# Coding challenge
-**Carpark Ubi**
+# Coding Challenge
+This is the challenge project of Ibrahim AVCI, created based on the requirements defined in
+https://github.com/ubitricity/coding-challenge.
+I used IntelliJ IDE for development. Infrastructure is created over Spring Boot, Lombok and RESTFul services.
 
-## Domain vocabulary:
-EV - electric vehicle.
-CP - charging point, an element in an infrastructure that supplies electric energy for the recharging of electric vehicles.
+#### Building & Running Over Script File with in ease
 
-## Problem details:
-The task is to implement a simple application to manage the charging points installed at Carpark Ubi.
-Carpark Ubi has 10 charging points installed. When a car is connected it consumes either 20 Amperes (fast charging) or 10 Amperes (slow charging).
-Carpark Ubi installation has an overall current input of 100 Amperes so it can support fast charging for a maximum of 5 cars or slow charging for a maximum of 10 cars at one time.
-A charge point notifies the application when a car is plugged or unplugged.
-The application must distribute the available current of 100 Amperes among the charging points so that when possible all cars use fast charging and when the current is not sufficient some cars are switched to slow charging.
-Cars which were connected earlier have lower priority than those which were connected later.
-The application must also provide a report with a current state of each charging point returning a list of charging point, status (free or occupied) and - if occupied – the consumed current.
+1.  Execute the `./build-all.sh` shell script in the root directory of project in the terminal.
+    This will run maven and install the application, afterwards docker compose
+    will run. The docker container will be up.
+    Please wait a little while to see check it on Postman.
 
-## Requirements:
-1. The solution must be implemented as a Spring Boot application with Java.
-2. We need to be able to start it and run tests.
-3. BIZ logic needs to be implemented correctly.
-4. Interaction with the APP needs to happen through well-defined REST APIs.
-4. Include at least one unit test and one integration test.
-3. Solution needs to be thread safe.
+2.  When the project boot up, we store 2 station as default,It is configurable from application.properties file. (carparkubi.count=2)
+    Each of these stations will have 10 charge points.
 
-## Examples:
+3.  You can call localhost:8080/plugin endpoint to station 1 or station 2. (I called this stations CarParkUbi)
+    `{
+    "carparkUbiId": 1,
+    "connectPointId": 1,
+    "chargingMode": "FAST"
+    }`
+    ![Plug your car in one of connect point](restcalls-pic/plugin.png)
 
-```
-CP1 sends a notification that a car is plugged
-Report: 
-CP1 OCCUPIED 20A
-CP2 AVAILABLE
-...
-CP10 AVAILABLE
-```
+4. You can call localhost:8080/unplug/{carparkUbiId}/{chargingPointId} endpoint to unplug your car from station 1 and from char point 1
+   ![UnPlug your car in one of connect point](restcalls-pic/unplug.png)
 
-```
-CP1, CP2, CP3, CP4, CP5 and CP6 send notification that a car is plugged
-Report:
-CP1 OCCUPIED 10A
-CP2 OCCUPIED 10A
-CP3 OCCUPIED 20A
-CP4 OCCUPIED 20A
-CP5 OCCUPIED 20A
-CP6 OCCUPIED 20A
-CP7 AVAILABLE
-...
-CP10 AVAILABLE
-```
-
-## Deliverables:
-Link to the git repository with the implementation and the documentation on how to call the API (Swagger/Postman collection/text description).
-Please add any details about your ideas and considerations to this README and add it to the repository.
+5. You can get report of the station with calling CarParkUbi station Id such as localhost:8080/report/{carparkUbiId}
+   ![UnPlug your car in one of connect point](restcalls-pic/report.png)
