@@ -70,7 +70,7 @@ public class ChargingPointController {
     public String report(@PathVariable("carparkUbiId") Long carparkUbiId) throws ServiceResponseException {
         try {
             final Collection<ChargingPoint> chargingPoints = this.chargingService
-                    .getCarparkUbiChargingPoints(carparkUbiId);
+                    .getCarParkUbiChargingPoints(carparkUbiId);
             String reportDetails = chargingPoints.stream()
                                                  .map(ChargingPoint::report)
                                                  .collect(Collectors

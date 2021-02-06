@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-public class CarparkUbi {
+public class CarParkUbi {
 
     @Setter
     private long id;
@@ -19,7 +19,7 @@ public class CarparkUbi {
 
     private ConcurrentMap<Long, ChargingPoint> chargingPoints = new ConcurrentHashMap<>();
 
-    public CarparkUbi(long chargingPointCount) {
+    public CarParkUbi(long chargingPointCount) {
         this.capacity = ChargingMode.SLOW.getCurrent() * chargingPointCount;
 
         LongStream.rangeClosed(1, chargingPointCount).forEach(i -> {
