@@ -11,8 +11,6 @@ import com.ubitricity.challenge.carparkubi.service.ChargingService;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 @RestController
 public class ChargingPointController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChargingPointController.class);
 
     private final ChargingService chargingService;
 
@@ -48,7 +44,7 @@ public class ChargingPointController {
             log.error("CarPark Not Exist: {} {}", requestModel, carParkNotExistException.getStackTrace());
             throw new BadRequestException("CarPark Not Exist", carParkNotExistException);
         } catch (Exception exception) {
-            LOGGER.error("Could not plug in {} {}", requestModel, exception.getStackTrace());
+            log.error("Could not plug in {} {}", requestModel, exception.getStackTrace());
             throw new InternalServerErrorException(exception.getMessage());
         }
     }
