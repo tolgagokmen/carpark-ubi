@@ -1,6 +1,7 @@
 package com.ubitricity.challenge.carparkubi.controller;
 
 import com.ubitricity.challenge.carparkubi.exception.BadRequestException;
+import com.ubitricity.challenge.carparkubi.exception.CarParkNotExistException;
 import com.ubitricity.challenge.carparkubi.exception.ChargingPointAlreadyOccupiedException;
 import com.ubitricity.challenge.carparkubi.exception.InternalServerErrorException;
 import com.ubitricity.challenge.carparkubi.exception.ServiceResponseException;
@@ -43,6 +44,9 @@ public class ChargingPointController {
             log.error("Charging point is already occupied: {} {}", requestModel, chargingPointAlreadyOccupiedException
                     .getStackTrace());
             throw new BadRequestException("Charging point is already occupied", chargingPointAlreadyOccupiedException);
+        } catch (CarParkNotExistException carParkNotExistException) {
+            log.error("CarPark Not Exist: {} {}", requestModel, carParkNotExistException.getStackTrace());
+            throw new BadRequestException("CarPark Not Exist", carParkNotExistException);
         } catch (Exception exception) {
             LOGGER.error("Could not plug in {} {}", requestModel, exception.getStackTrace());
             throw new InternalServerErrorException(exception.getMessage());
@@ -50,18 +54,34 @@ public class ChargingPointController {
     }
 
     @DeleteMapping("/unplug/{carparkUbiId}/{chargingPointId}")
-    public void unplugCar(@PathVariable("carparkUbiId") Long carparkUbiId, @PathVariable("chargingPointId") Long chargingPointId) {
-        this.chargingService.carUnPlugged(carparkUbiId, chargingPointId);
+    public void unplugCar(@PathVariable("carparkUbiId") Long carparkUbiId, @PathVariable("chargingPointId") Long chargingPointId) throws ServiceResponseException {
+        try {
+            this.chargingService.carUnPlugged(carparkUbiId, chargingPointId);
+        } catch (CarParkNotExistException carParkNotExistException) {
+            log.error("CarPark Not Exist for given carparkUbiId: {} {}", carparkUbiId, carParkNotExistException
+                    .getStackTrace());
+            throw new BadRequestException("CarPark Not Exist", carParkNotExistException);
+        } catch (Exception exception) {
+            throw new InternalServerErrorException(exception.getMessage());
+        }
     }
 
     @GetMapping("/report/{carparkUbiId}")
-    public String report(@PathVariable("carparkUbiId") Long carparkUbiId) {
-        final Collection<ChargingPoint> chargingPoints = this.chargingService
-                .getCarparkUbiChargingPoints(carparkUbiId);
-
-        return chargingPoints.stream()
-                             .map(ChargingPoint::report)
-                             .collect(Collectors.joining("\n"));
+    public String report(@PathVariable("carparkUbiId") Long carparkUbiId) throws ServiceResponseException {
+        try {
+            final Collection<ChargingPoint> chargingPoints = this.chargingService
+                    .getCarparkUbiChargingPoints(carparkUbiId);
+            String reportDetails = chargingPoints.stream()
+                                                 .map(ChargingPoint::report)
+                                                 .collect(Collectors
+                                                         .joining("\n"));
+            return String.format("==Report for carparkUid %s==\n%s", carparkUbiId, reportDetails);
+        } catch (CarParkNotExistException carParkNotExistException) {
+            log.error("CarPark Not Exist for given carparkUbiId: {} {}", carparkUbiId, carParkNotExistException
+                    .getStackTrace());
+            throw new BadRequestException("CarPark Not Exist", carParkNotExistException);
+        } catch (Exception exception) {
+            throw new InternalServerErrorException(exception.getMessage());
+        }
     }
-
 }
